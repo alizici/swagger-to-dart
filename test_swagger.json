@@ -1,0 +1,158 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Loan API",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/v1/loan/calculate": {
+      "post": {
+        "tags": ["Loan"],
+        "operationId": "calculateLoan",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoanCalculationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanCalculationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/loan/{id}": {
+      "get": {
+        "tags": ["Loan"],
+        "operationId": "getLoan",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoanDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LoanCalculationRequest": {
+        "type": "object",
+        "properties": {
+          "Amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "InterestRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "TermInMonths": {
+            "type": "integer"
+          },
+          "StartDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": ["Amount", "InterestRate", "TermInMonths"]
+      },
+      "LoanCalculationResponse": {
+        "type": "object",
+        "properties": {
+          "MonthlyPayment": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalPayment": {
+            "type": "number",
+            "format": "double"
+          },
+          "TotalInterest": {
+            "type": "number",
+            "format": "double"
+          },
+          "PaymentSchedule": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentDetail"
+            }
+          }
+        }
+      },
+      "PaymentDetail": {
+        "type": "object",
+        "properties": {
+          "PaymentNumber": {
+            "type": "integer"
+          },
+          "PaymentDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Principal": {
+            "type": "number",
+            "format": "double"
+          },
+          "Interest": {
+            "type": "number",
+            "format": "double"
+          },
+          "Balance": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "LoanDetails": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "integer"
+          },
+          "CustomerName": {
+            "type": "string"
+          },
+          "Amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "Status": {
+            "type": "string"
+          },
+          "CreatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}
